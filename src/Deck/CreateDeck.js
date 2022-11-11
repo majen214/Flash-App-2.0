@@ -50,15 +50,15 @@ function CreateDeck() {
         </div>
         <div className="form-group">
           <label for="description">Description</label>
-          <input 
-          type="textarea" 
+          <textarea 
+          type="text" 
           className="form-control" 
-          id="name" 
+          id="description" 
           aria-describedby="description"
           placeholder="Brief description of the deck"
           rows="3"
           value={description} 
-          onChange={handleDescriptionChange} />
+          onChange={handleDescriptionChange}></textarea>
         </div>
         
         <br />

@@ -33,7 +33,7 @@ function DeckList() {
       <div className="card mb-3">
       <div className="card-body">
         <h5 className="card-title">{deck.name}
-          <p className="card-text"><small className="text-muted float-right" >{deck.cards.length}</small></p>
+          <p className="card-text"><small className="text-muted float-right" >{deck.cards.length} cards</small></p>
         </h5>
         <br></br>
           <p className="card-text">{deck.description}</p>

@@ -23,13 +23,15 @@ function CardList({deck, cardCount, cards}) {
     }
 
 //flips cards front/back w/boolean
-function flipButton() {
+function flipClick() {
+    console.log(cards[index].front);
     setFlipSide(!flipSide);
 }
 
 //cycles through deck; once complete, user prompted to restart or return home 
 function nextClick() {
     if (index < (cardCount-1)) {
+        console.log(cardCount);
         setIndex(index + 1);
         setFlipSide(true);
     } else {
@@ -51,8 +53,8 @@ function nextClick() {
         <div className="card w-75">
             <div className="card-body">
                 <h5 className="card-title">Card {index + 1} of {cardCount}</h5>
-                    <p className="card-text">{flipSide ? cards[index]?.front : cards[index]?.back}</p>
-                        <button type="button" className="btn btn-secondary" onClick={flipButton}>Flip</button>
+                    <p className="card-text">{flipSide ? cards[index].front : cards[index].back}</p>
+                        <button type="button" className="btn btn-secondary" onClick={flipClick}>Flip</button>
                         <button type="button" className="btn btn-primary" onClick={nextClick}>Next</button>
             </div>
         </div>

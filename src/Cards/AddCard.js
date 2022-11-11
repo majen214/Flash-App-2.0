@@ -8,7 +8,7 @@ function AddCard({card}) {
   const [front, setFront] = useState("");
   const [back, setBack] = useState("");
   // const [card, setCard] = useState({});
-  const { deckId } = useParams;
+  const { deckId } = useParams();
   const history = useHistory();
 
   //pulls correct deck in order to add cards
@@ -84,7 +84,7 @@ const onChangeBackHandler = (e) => {
           <li className="breadcrumb-item active" aria-current="page">Add Card</li>
         </ol>
       </nav>
-      <h1>{`${deckId}: Add Card`}</h1>
+      <h1>{`${deck.name}: Add Card`}</h1>
       <div className="card-info">
       <CardForm 
           card={card}

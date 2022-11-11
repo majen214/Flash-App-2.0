@@ -39,14 +39,16 @@ function Study() {
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-          <li className="breadcrumb-item"><Link to={`/decks/${deck.id}`}>{deck.name}</Link></li>
+          <li className="breadcrumb-item"><Link to={`/decks/${deckId}`}>{deck.name}</Link></li>
           <li className="breadcrumb-item active" aria-current="page">Study</li>
         </ol>
       </nav>
-      <h1>Study: {`${deck.name}`}</h1>
+      <h1>{`Study: ${deck.name}`}</h1>
       <div><CardList deck={deck} cardCount={cardCount} cards={cards} /></div>
     </div>
   )
 }
 
 export default Study;
+
+// {`/decks/${deckId}`}>{deck.name}
