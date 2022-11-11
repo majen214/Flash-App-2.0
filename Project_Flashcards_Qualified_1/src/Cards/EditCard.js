@@ -1,73 +1,105 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams, Link } from "react-router-dom";
-import { readDeck, readCard, updateCard } from "../utils/api/index";
-import CardForm from "./CardForm";
+import { readDeck } from "../utils/api";
+import { updateDeck } from "../utils/api/index";
 
-function EditCard() {
-  const [deck, setDeck] = useState({});
-  const [card, setCard] = useState({});
-  const { deckId, cardId } = useParams();
-  const history = useHistory();
+function EditDeck() {
+    const history = useHistory();
+    const [deck, setDeck] = useState([]);
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+    const { deckId } = useParams();
+    //handles the updating of the "name" and "description" values that will be put into the new deck
+    const handleNameChange = (event) => setName(event.target.value);
+    const handleDescriptionChange = (event) => setDescription(event.target.value);
 
-  //pulls correct deck order to add cards
-  useEffect(() => {
-    const abortController = new AbortController();
+        //loads the appropriate deck
+        useEffect(() => {
+            const deckAbort = new AbortController();
+    
+            async function loadDeck() {
+                try{
+                    const pullDeck = await readDeck(deckId, deckAbort.signal);
+                    setDeck(pullDeck);
+                    setName(pullDeck.name);
+                    setDescription(pullDeck.description);
+                }
+                catch (error) {
+                    console.log("error creating deck list");
+                }
+    
+                return () => {
+                    deckAbort.abort();
+                }
+            }
+    
+            loadDeck();
+        }, [deckId])
 
-    async function loadDeckAndCards() {
-      try {
-        const deckData = await readDeck(deckId, abortController.signal);
-        const cardData = await readCard(cardId, abortController.signal);
-        setDeck(deckData);
-        setCard(cardData);
-//         setFront(cardData.front);
-//         setBack(cardData.back);
-      }
-      catch (error) {
-        console.log("error creating deck list");
-      }
-      return () => {
-        abortController.abort();
-      }
-    }  
-    loadDeckAndCards();
-  }, []);
+    //on submit, udpates a new deck in data/db.json, then the site directs to the new decks "view" page
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        updateDeck({
+            ...deck,
+            name: name,
+            description: description,
+        }).then((newDeck) => history.push(`/decks/${newDeck.id}`))
+        // console.log(name);
+        // console.log(description);
+    }
+    return (
+        //the create deck form saves the data inputted by the form into data/db.json
+        <div className="edit-deck">
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item">
+                        <Link to="/">
+                            <span className="oi oi-home mx-1"></span>
+                            Home
+                        </Link>
+                    </li>
+                    <li className="breadcrumb-item active" aria-current="page">
+                        <Link to={`/decks/${deck.id}`}>{deck.name}</Link>
+                    </li>
+                    <li className="breadcrumb-item active" aria-current="page">Edit Deck</li>
+                </ol>
+            </nav>
+            <h3>Edit: {deck.name}</h3>
+            <form onSubmit={handleSubmit}>
+            <div className="form-group">
+                <label htmlFor="name">Name</label>
+                <input 
+                type="text" 
+                className="form-control" 
+                id="name" 
+                required
+                onChange={handleNameChange} 
+                value={name}
+                 />
+            </div>
+            <br />
+            <div className="form-group">
+                <label htmlFor="description">Description</label>
+                <textarea 
+                className="form-control" 
+                id="description" 
+                rows="3" 
+                required
+                onChange={handleDescriptionChange}
+                value={description}
+                ></textarea>
+            </div>
+            <br />
+            <button className="btn btn-secondary mx-1" onClick={() => history.push(`/decks/${deck.id}`)}>
+                Cancel
+            </button>
+            <button type="submit" className="btn btn-primary mx-1">
+                Submit
+            </button>
+        </form>
+        </div>
+    )
 
-  //when form saved, card will be added to deck and user can add new cards
-  
-  const submitHandler = async (e) => {
-    e.preventDefault();
-      const abortController = new AbortController();
-      await updateCard(card, abortController.signal);
-      history.push(`/decks/${deckId}`);
-};
-  
-  const onChangeHandler = (e) => {
-    setCard({
-    ...card,
-    [e.target.name]: e.target.value,
-    });
-};
-
-  return (
-    <div>
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb">
-          <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-          <li className="breadcrumb-item"><Link to={`/decks/${deck.id}`}>{deck.name}</Link></li>
-          <li className="breadcrumb-item active" aria-current="page">`Edit Card ${card.id}`</li>
-        </ol>
-      </nav>
-      <h1>EditCard</h1>
-      <div className="card-info">
-        <CardForm 
-          card={card}
-          deck={deck}
-          handleSubmit={submitHandler}
-          handleChange = {onChangeHandler}
-          />
-      </div>
-    </div>
-  )
 }
 
-export default EditCard;
+export default EditDeck;

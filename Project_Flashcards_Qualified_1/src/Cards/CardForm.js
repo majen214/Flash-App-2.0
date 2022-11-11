@@ -1,42 +1,48 @@
 import React from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-function CardForm({ card, onChangeBackHandler, onChangeFrontHandler, submitHandler, front, back }) {
-  const history = useHistory();
-  const { deckId } = useParams;
-  
-  return (
-    <div>
-      <h1>CardForm</h1>
-      
-      <form onSubmit={submitHandler}>
-        <div className="form-group">
-          <label for="front">Front</label>
-          <textarea 
-          type="text" 
-          className="form-control" 
-          id="front" 
-          placeholder="Front side of the card"
-          onChange={onChangeFrontHandler}
-          value={front}
-          ></textarea>
-        </div>
-        <div class="form-group">
-          <label for="back">Back</label>
-          <textarea 
-          type="text" 
-          className="form-control" 
-          id="back" 
-          placeholder="Back side of the card"
-          onChange={onChangeBackHandler}
-          value={back}
-          ></textarea>
-        </div>
-      </form>
-      <button type="button" className="btn btn-secondary mx-1" onClick={() => history.push(`/decks/${deckId}`)}>Done</button>
-      <button type="submit" className="btn btn-primary">Save</button>
-    </div>
-  )
+function CardForm({front, back, setFront, setBack, handleSubmit, deck}) {
+    const history = useHistory();
+
+    //initializes the front and back values of the card
+    const handleFrontChange = (event) => setFront(event.target.value);
+    const handleBackChange = (event) => setBack(event.target.value);
+
+
+    return (
+        <form onSubmit={handleSubmit}> 
+            <div className="form-group">
+            <label htmlFor="front">Front</label>
+                <textarea 
+                className="form-control" 
+                id="front" 
+                rows="3" 
+                placeholder="Front side of card"
+                required
+                onChange={handleFrontChange}
+                value={front}
+                ></textarea>
+            </div>
+            <div className="form-group">
+                <label htmlFor="back">Back</label>
+                <textarea 
+                className="form-control" 
+                id="back" 
+                rows="3" 
+                placeholder="Back side of card"
+                required
+                onChange={handleBackChange}
+                value={back}
+                ></textarea>
+            </div>
+            <button className="btn btn-secondary mx-1" onClick={() => history.push(`/decks/${deck.id}`)}>
+                Done
+            </button>
+            <button type="submit" className="btn btn-primary mx-1">
+                Save
+            </button>
+        </form>
+    )
 }
 
 export default CardForm;

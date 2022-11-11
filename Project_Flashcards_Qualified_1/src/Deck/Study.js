@@ -1,52 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { readDeck } from "../utils/api/index";
-import CardList from "../Cards/CardList";
+import React from "react";
+import { deleteCard } from "../utils/api/index";
 
-function Study() {
+function CardDelete({cardId, deckId}) {
 
-  const [deck, setDeck] = useState({});
-  const [cards, setCards] = useState([]);
-  const [cardCount, setCardCount] = useState(0)
-  const { deckId } = useParams();
-  
-  //loads selected deck
-  useEffect(() => {
-    const deckAbort = new AbortController();
+    //this function is called when the delete button is clicked to delete a specific card
+    function handleCardDelete() {
+        const deleteCardPromt = window.confirm("Delete this Card? You will not be able to recover it.") //displays the delete message the user will see
 
-    async function showCard() {
-      try {
-        const cardList = await readDeck(deckId, deckAbort.signal);
-        setDeck(cardList);
-        setCardCount(cardList.cards.length);
-        setCards(cardList.cards);
-      }
-      catch (error) {
-        console.log("error creating card list");
-      }
-    } 
-
-    showCard();
-    return () => deckAbort.abort();
-  }, ([deckId])) //reruns effect when deckId changes
-
-  console.log(deck);
-  // console.log(cardCount);
-  // console.log(deck.cards);
-
-  return (
-    <div>
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb">
-          <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-          <li className="breadcrumb-item"><Link to={`/decks/${deck.id}`}>{deck.name}</Link></li>
-          <li className="breadcrumb-item active" aria-current="page">Study</li>
-        </ol>
-      </nav>
-      <h1>Study: {`${deck.name}`}</h1>
-      <div><CardList deck={deck} cardCount={cardCount} cards={cards} /></div>
-    </div>
-  )
+    if(deleteCardPromt) {
+        deleteCard(cardId)
+        .then(window.location.reload()) //this reloads the page to show that the card has been deleted.
+    }
 }
 
-export default Study;
+    //populates the delete button
+    return (
+        <button className="btn btn-danger float-right" onClick={handleCardDelete}>
+            <span className="oi oi-trash"></span>
+        </button>
+    )
+}
+
+export default CardDelete;
