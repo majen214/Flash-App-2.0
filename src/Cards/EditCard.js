@@ -60,7 +60,8 @@ function EditCard() {
       <h1>EditCard</h1>
       <div className="card-info">
         <CardForm 
-          card={card}
+          front={card.front}
+          back={card.back}
           deck={deck}
           handleSubmit={submitHandler}
           handleChange = {onChangeHandler}

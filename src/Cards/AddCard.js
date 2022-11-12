@@ -87,7 +87,6 @@ const onChangeBackHandler = (e) => {
       <h1>{`${deck.name}: Add Card`}</h1>
       <div className="card-info">
       <CardForm 
-          card={card}
           handleSubmit={submitHandler}
           onChangeFrontHandler={onChangeFrontHandler}
           onChangeBackHandler={onChangeBackHandler}

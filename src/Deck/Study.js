@@ -36,6 +36,8 @@ function Study() {
 if (deck && deck.id && cards.length < 3) {
         return (
             <div>
+              
+              <h1>{deck.name}</h1>
                 <h4>Not Enough Cards.</h4>
                 <p>You need at least 3 cards to study. There are {`${cardCount}`} cards in this deck.</p>
                 <button 
