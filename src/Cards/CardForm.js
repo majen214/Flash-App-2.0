@@ -34,7 +34,7 @@ function CardForm({ onChangeBackHandler, onChangeFrontHandler, submitHandler, fr
         </div>
       </form>
       <button type="button" className="btn btn-secondary mx-1" onClick={() => history.push(`/decks/${deckId}`)}>Done</button>
-      <button type="submit" className="btn btn-primary">Save</button>
+      <button type="submit" className="btn btn-primary" onClick={submitHandler}>Save</button>
     </div>
   )
 }

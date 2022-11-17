@@ -16,11 +16,12 @@ function AddCard({card}) {
     const abortController = new AbortController();
     async function loadDeck() {
       try {
+        console.log(setDeck.name);
         const pullDeck = await readDeck(deckId, abortController.signal);
         setDeck(pullDeck);
       }
       catch (error) {
-        console.log("error reading deck list");
+        console.log("error loading deck");
       }
     }
     loadDeck();
