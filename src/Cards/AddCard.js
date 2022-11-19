@@ -10,13 +10,13 @@ function AddCard({card}) {
   // const [card, setCard] = useState({});
   const { deckId } = useParams();
   const history = useHistory();
+  console.log(deckId);
 
   //pulls correct deck in order to add cards
   useEffect(() => {
     const abortController = new AbortController();
     async function loadDeck() {
       try {
-        console.log(setDeck.name);
         const pullDeck = await readDeck(deckId, abortController.signal);
         setDeck(pullDeck);
       }
@@ -24,6 +24,7 @@ function AddCard({card}) {
         console.log("error loading deck");
       }
     }
+    
     loadDeck();
 
     return () => abortController.abort();
@@ -52,8 +53,10 @@ function AddCard({card}) {
         back, 
         deckId
       }
+      console.log(newCard);
       await createCard(deckId, newCard, abortController.signal);
       // setCard({});
+      console.log(setDeck);
       history.push(`/decks`);
 };
 
