@@ -6,8 +6,11 @@ import CardForm from "./CardForm";
 function EditCard() {
   const [deck, setDeck] = useState({});
   const [card, setCard] = useState({});
+  const [cardFront, setCardFront] = useState("");
+  const [cardBack, setCardBack] = useState("");
   const { deckId, cardId } = useParams();
   const history = useHistory();
+
 
   //pulls correct deck order to add cards
   useEffect(() => {
@@ -19,11 +22,11 @@ function EditCard() {
         const cardData = await readCard(cardId, abortController.signal);
         setDeck(deckData);
         setCard(cardData);
-//         setFront(cardData.front);
-//         setBack(cardData.back);
+        setCardFront(cardData.front);
+        setCardBack(cardData.back);
       }
       catch (error) {
-        console.log("error creating deck list");
+        console.log("error creating card list");
       }
       return () => {
         abortController.abort();
@@ -41,11 +44,22 @@ function EditCard() {
       history.push(`/decks/${deckId}`);
 };
   
-  const onChangeHandler = (e) => {
-    setCard({
-    ...card,
-    [e.target.name]: e.target.value,
-    });
+const onChangeFrontHandler = ({target}) => {
+  setCardFront(target.value);
+  setCard({
+  ...card,
+  front: target.value,
+  // [e.target.name]: e.target.value,
+  });
+};
+
+const onChangeBackHandler = ({target}) => {
+  console.log("back change handler")
+  setCardBack(target.value);
+  setCard({
+  ...card,
+  back: target.value,
+  });
 };
 
   return (
@@ -59,13 +73,37 @@ function EditCard() {
       </nav>
       <h1>EditCard</h1>
       <div className="card-info">
-        <CardForm 
-          front={card.front}
-          back={card.back}
-          deck={deck}
-          handleSubmit={submitHandler}
-          handleChange = {onChangeHandler}
-          />
+      <div>
+      <h1>CardForm</h1>
+      
+      <form onSubmit={submitHandler}>
+        <div className="form-group">
+          <label htmlFor="front">Front</label>
+          <textarea 
+          type="text" 
+          className="form-control" 
+          id="front" 
+          placeholder="Front side of the card"
+          onChange={onChangeFrontHandler}
+          value={cardFront}
+          ></textarea>
+        </div>
+        <div className="form-group">
+          <label htmlFor="back">Back</label>
+          <textarea 
+          type="text" 
+          className="form-control" 
+          id="back" 
+          placeholder="Back side of the card"
+          onChange={onChangeBackHandler}
+          value={cardBack}  
+          ></textarea>
+        </div>
+      </form>
+      
+    </div>
+        <button type="button" className="btn btn-secondary mx-1" onClick={() => history.push(`/decks/${deckId}`)}>Done</button>
+        <button type="submit" className="btn btn-primary" onClick={submitHandler}>Save</button>
       </div>
     </div>
   )

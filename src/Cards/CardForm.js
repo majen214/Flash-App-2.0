@@ -1,40 +1,47 @@
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
 
-function CardForm({ onChangeBackHandler, onChangeFrontHandler, submitHandler, front, back }) {
+function CardForm({ onChangeBackHandler, onChangeFrontHandler, submitHandler, newCard={} }) {
   const history = useHistory();
   const { deckId } = useParams;
   
+  function front() {
+    return newCard.front ? newCard.front : "";
+  }
+
+  function back() {
+    return newCard.back ? newCard.back : "";
+  }
+
   return (
     <div>
       <h1>CardForm</h1>
       
       <form onSubmit={submitHandler}>
         <div className="form-group">
-          <label for="front">Front</label>
+          <label htmlFor="front">Front</label>
           <textarea 
           type="text" 
           className="form-control" 
           id="front" 
           placeholder="Front side of the card"
           onChange={onChangeFrontHandler}
-          value={front}
+          value={front()}
           ></textarea>
         </div>
-        <div class="form-group">
-          <label for="back">Back</label>
+        <div className="form-group">
+          <label htmlFor="back">Back</label>
           <textarea 
           type="text" 
           className="form-control" 
           id="back" 
           placeholder="Back side of the card"
           onChange={onChangeBackHandler}
-          value={back}
+          value={back()}  
           ></textarea>
         </div>
       </form>
-      <button type="button" className="btn btn-secondary mx-1" onClick={() => history.push(`/decks/${deckId}`)}>Done</button>
-      <button type="submit" className="btn btn-primary" onClick={submitHandler}>Save</button>
+      
     </div>
   )
 }
