@@ -78,6 +78,12 @@
       "cardId": "",
       "id": 11,
       "deckId": 3
+    },
+    {
+      "front": "test NEW TEST",
+      "back": "testt",
+      "deckId": 3,
+      "id": 12
     }
   ]
 }

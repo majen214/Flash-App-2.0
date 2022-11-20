@@ -1,6 +1,7 @@
-import React, { useState, } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useHistory } from "react-router-dom";
 import { createCard } from "../utils/api/index";
+import { readDeck } from "../utils/api/index";
 import CardForm from "./CardForm";
 
 
@@ -19,6 +20,20 @@ function AddCard({card}) {
   const { deckId } = useParams();
   const history = useHistory();
 
+  useEffect(() => {
+    const deckAbort = new AbortController();
+
+    async function loadDeck() {
+      try {
+        const pullDeck = await readDeck(deckId, deckAbort.signal);
+        setDeck(pullDeck);
+      } catch (error) {
+        console.log("error creating deck list")
+      }
+      return () => deckAbort.abort();
+    }
+    loadDeck();
+  }, [deckId]);
 
   const submitHandler = async (e) => {
     console.log("submit button handler");
